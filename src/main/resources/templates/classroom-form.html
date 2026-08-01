@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/header :: header('TinyTrack | Classroom')}">
+</head>
+
+<body>
+
+<div th:replace="~{fragments/navigation :: navigation}"></div>
+
+<main class="container">
+
+    <section class="page-heading-row">
+
+        <div>
+
+            <h1
+                th:text="${classroom.id == null
+                    ? 'Add Classroom'
+                    : 'Edit Classroom'}">
+                Add Classroom
+            </h1>
+
+            <p
+                th:text="${classroom.id == null
+                    ? 'Enter the classroom information below.'
+                    : 'Update the classroom information below.'}">
+                Enter the classroom information below.
+            </p>
+
+        </div>
+
+    </section>
+
+    <section class="panel form-panel">
+
+        <form
+            th:action="${classroom.id == null}
+                ? @{/classrooms/save}
+                : @{/classrooms/{id}/update(id=${classroom.id})}"
+            th:object="${classroom}"
+            method="post">
+
+            <div class="form-grid">
+
+                <div class="form-group">
+
+                    <label for="classroomName">
+                        Classroom Name
+                    </label>
+
+                    <input
+                        id="classroomName"
+                        type="text"
+                        th:field="*{classroomName}">
+
+                    <p
+                        class="field-error"
+                        th:if="${#fields.hasErrors('classroomName')}"
+                        th:errors="*{classroomName}">
+                    </p>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for="center">
+                        Center
+                    </label>
+
+                    <select
+                        id="center"
+                        th:field="*{center}">
+
+                        <option value="">
+                            Select a center
+                        </option>
+
+                        <option
+                            th:each="centerOption : ${centers}"
+                            th:value="${centerOption.id}"
+                            th:text="${centerOption.centerName}">
+                            Center Name
+                        </option>
+
+                    </select>
+
+                    <p
+                        class="field-error"
+                        th:if="${#fields.hasErrors('center')}"
+                        th:errors="*{center}">
+                    </p>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for="minimumAgeMonths">
+                        Minimum Age in Months
+                    </label>
+
+                    <input
+                        id="minimumAgeMonths"
+                        type="number"
+                        min="0"
+                        th:field="*{minimumAgeMonths}">
+
+                    <p
+                        class="field-error"
+                        th:if="${#fields.hasErrors('minimumAgeMonths')}"
+                        th:errors="*{minimumAgeMonths}">
+                    </p>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for="maximumAgeMonths">
+                        Maximum Age in Months
+                    </label>
+
+                    <input
+                        id="maximumAgeMonths"
+                        type="number"
+                        min="0"
+                        th:field="*{maximumAgeMonths}">
+
+                    <p
+                        class="field-error"
+                        th:if="${#fields.hasErrors('maximumAgeMonths')}"
+                        th:errors="*{maximumAgeMonths}">
+                    </p>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for="licensedCapacity">
+                        Licensed Capacity
+                    </label>
+
+                    <input
+                        id="licensedCapacity"
+                        type="number"
+                        min="1"
+                        th:field="*{licensedCapacity}">
+
+                    <p
+                        class="field-error"
+                        th:if="${#fields.hasErrors('licensedCapacity')}"
+                        th:errors="*{licensedCapacity}">
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="form-actions">
+
+                <a
+                    th:href="@{/classrooms}"
+                    class="button secondary-button">
+                    Cancel
+                </a>
+
+                <button type="submit" class="button">
+
+                    <span
+                        th:text="${classroom.id == null
+                            ? 'Save Classroom'
+                            : 'Update Classroom'}">
+                        Save Classroom
+                    </span>
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </section>
+
+</main>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+</body>
+
+</html>

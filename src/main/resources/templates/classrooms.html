@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/header :: header('TinyTrack | Classrooms')}">
+</head>
+
+<body>
+
+<div th:replace="~{fragments/navigation :: navigation}"></div>
+
+<main class="container">
+
+    <section class="page-heading-row">
+
+        <div>
+            <h1>Classrooms</h1>
+
+            <p>
+                Manage classroom age ranges and licensed capacities.
+            </p>
+        </div>
+
+        <a th:href="@{/classrooms/new}" class="button">
+            + Add Classroom
+        </a>
+
+    </section>
+
+    <section class="panel">
+
+        <div class="table-header-row">
+
+            <h2>Active Classrooms</h2>
+
+            <span
+                class="record-count"
+                th:text="${#lists.size(classrooms)} + ' classroom(s)'">
+                0 classroom(s)
+            </span>
+
+        </div>
+
+        <div class="table-responsive">
+
+            <table class="data-table">
+
+                <thead>
+                    <tr>
+                        <th>Classroom</th>
+                        <th>Center</th>
+                        <th>Minimum Age</th>
+                        <th>Maximum Age</th>
+                        <th>Capacity</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    <tr th:if="${#lists.isEmpty(classrooms)}">
+                        <td colspan="7" class="empty-state">
+                            No active classrooms have been added yet.
+                        </td>
+                    </tr>
+
+                    <tr th:each="classroom : ${classrooms}">
+
+                        <td th:text="${classroom.classroomName}">
+                            Classroom Name
+                        </td>
+
+                        <td th:text="${classroom.center.centerName}">
+                            Center Name
+                        </td>
+
+                        <td
+                            th:text="${classroom.minimumAgeMonths + ' months'}">
+                            0 months
+                        </td>
+
+                        <td
+                            th:text="${classroom.maximumAgeMonths + ' months'}">
+                            12 months
+                        </td>
+
+                        <td th:text="${classroom.licensedCapacity}">
+                            10
+                        </td>
+
+                        <td>
+                            <span class="status-badge status-active">
+                                Active
+                            </span>
+                        </td>
+
+                        <td class="action-cell">
+
+                            <a
+                                th:href="@{/classrooms/{id}/edit(
+                                    id=${classroom.id}
+                                )}"
+                                class="table-action">
+                                Edit
+                            </a>
+
+                            <form
+                                th:action="@{/classrooms/{id}/deactivate(
+                                    id=${classroom.id}
+                                )}"
+                                method="post">
+
+                                <button
+                                    type="submit"
+                                    class="table-action danger-action">
+                                    Inactivate
+                                </button>
+
+                            </form>
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+</main>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+</body>
+
+</html>
