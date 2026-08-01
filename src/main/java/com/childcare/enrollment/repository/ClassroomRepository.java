@@ -1,6 +1,7 @@
 package com.childcare.enrollment.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -12,4 +13,11 @@ public interface ClassroomRepository
     List<Classroom> findByActiveTrueOrderByClassroomNameAsc();
 
     long countByActiveTrue();
+
+    Optional<Classroom> findByClassroomNameIgnoreCaseAndActiveTrue(
+        String classroomName
+      );
+
+
+
 }

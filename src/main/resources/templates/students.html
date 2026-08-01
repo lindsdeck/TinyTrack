@@ -30,6 +30,45 @@
 
     <section class="panel">
 
+        <form
+    class="search-form"
+    th:action="@{/students}"
+    method="get">
+
+    <div class="search-group">
+
+        <label for="studentSearch">
+            Search Students
+        </label>
+
+        <div class="search-controls">
+
+            <input
+                id="studentSearch"
+                type="search"
+                name="search"
+                th:value="${search}"
+                placeholder="Search by first or last name">
+
+            <button
+                type="submit"
+                class="button">
+                Search
+            </button>
+
+            <a
+                th:if="${search != null and !search.isBlank()}"
+                th:href="@{/students}"
+                class="button secondary-button">
+                Clear
+            </a>
+
+        </div>
+
+    </div>
+
+</form>
+
         <div class="table-header-row">
 
             <h2>Active Students</h2>
@@ -67,7 +106,12 @@
 
                     <td colspan="7" class="empty-state">
 
-                        No active students have been added yet.
+                        <span
+    th:text="${search != null and !search.isBlank()
+        ? 'No active students matched your search.'
+        : 'No active students have been added yet.'}">
+    No active students have been added yet.
+</span>
 
                     </td>
 

@@ -44,85 +44,103 @@
 
             <table class="data-table">
 
-                <thead>
-                    <tr>
-                        <th>Classroom</th>
-                        <th>Center</th>
-                        <th>Minimum Age</th>
-                        <th>Maximum Age</th>
-                        <th>Capacity</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
+               <thead>
+    <tr>
+        <th>Classroom</th>
+        <th>Center</th>
+        <th>Age Range</th>
+        <th>Enrolled</th>
+        <th>Capacity</th>
+        <th>Openings</th>
+        <th>Status</th>
+        <th>Actions</th>
+    </tr>
+</thead>
 
                 <tbody>
 
-                    <tr th:if="${#lists.isEmpty(classrooms)}">
-                        <td colspan="7" class="empty-state">
-                            No active classrooms have been added yet.
-                        </td>
-                    </tr>
+    <tr th:if="${#lists.isEmpty(classrooms)}">
 
-                    <tr th:each="classroom : ${classrooms}">
+        <td colspan="8" class="empty-state">
+            No active classrooms have been added yet.
+        </td>
 
-                        <td th:text="${classroom.classroomName}">
-                            Classroom Name
-                        </td>
+    </tr>
 
-                        <td th:text="${classroom.center.centerName}">
-                            Center Name
-                        </td>
+    <tr th:each="classroom : ${classrooms}">
 
-                        <td
-                            th:text="${classroom.minimumAgeMonths + ' months'}">
-                            0 months
-                        </td>
+        <td th:text="${classroom.classroomName}">
+            Classroom Name
+        </td>
 
-                        <td
-                            th:text="${classroom.maximumAgeMonths + ' months'}">
-                            12 months
-                        </td>
+        <td th:text="${classroom.center.centerName}">
+            Center Name
+        </td>
 
-                        <td th:text="${classroom.licensedCapacity}">
-                            10
-                        </td>
+        <td
+            th:text="${classroom.minimumAgeMonths == 0
+                ? 'Birth–' + classroom.maximumAgeMonths + ' months'
+                : classroom.minimumAgeMonths
+                    + '–'
+                    + classroom.maximumAgeMonths
+                    + ' months'}">
+            Age Range
+        </td>
 
-                        <td>
-                            <span class="status-badge status-active">
-                                Active
-                            </span>
-                        </td>
+        <td th:text="${classroom.activeEnrollment}">
+            0
+        </td>
 
-                        <td class="action-cell">
+        <td th:text="${classroom.licensedCapacity}">
+            0
+        </td>
 
-                            <a
-                                th:href="@{/classrooms/{id}/edit(
-                                    id=${classroom.id}
-                                )}"
-                                class="table-action">
-                                Edit
-                            </a>
+        <td>
 
-                            <form
-                                th:action="@{/classrooms/{id}/deactivate(
-                                    id=${classroom.id}
-                                )}"
-                                method="post">
+            <span
+                class="capacity-badge"
+                th:classappend="${classroom.currentOpenings == 0}
+                    ? ' capacity-full'
+                    : ' capacity-open'"
+                th:text="${classroom.currentOpenings}">
+                0
+            </span>
 
-                                <button
-                                    type="submit"
-                                    class="table-action danger-action">
-                                    Inactivate
-                                </button>
+        </td>
 
-                            </form>
+        <td>
 
-                        </td>
+            <span class="status-badge status-active">
+                Active
+            </span>
 
-                    </tr>
+        </td>
 
-                </tbody>
+        <td class="action-cell">
+
+            <a
+                th:href="@{/classrooms/{id}/edit(id=${classroom.id})}"
+                class="table-action">
+                Edit
+            </a>
+
+            <form
+                th:action="@{/classrooms/{id}/deactivate(id=${classroom.id})}"
+                method="post">
+
+                <button
+                    type="submit"
+                    class="table-action danger-action">
+                    Inactivate
+                </button>
+
+            </form>
+
+        </td>
+
+    </tr>
+
+</tbody>
 
             </table>
 

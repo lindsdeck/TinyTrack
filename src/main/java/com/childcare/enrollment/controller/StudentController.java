@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.childcare.enrollment.model.Student;
 import com.childcare.enrollment.service.ClassroomService;
@@ -29,17 +30,20 @@ public class StudentController {
     }
 
     @GetMapping("/students")
-    public String viewStudents(Model model) {
+public String viewStudents(
+        @RequestParam(required = false) String search,
+        Model model) {
 
-        model.addAttribute(
-                "students",
-                studentService.getActiveStudents()
-        );
+    model.addAttribute(
+            "students",
+            studentService.searchActiveStudents(search)
+    );
 
-        model.addAttribute("activePage", "students");
+    model.addAttribute("search", search);
+    model.addAttribute("activePage", "students");
 
-        return "students";
-    }
+    return "students";
+}
 
     @GetMapping("/students/new")
     public String showAddStudentForm(Model model) {

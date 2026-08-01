@@ -1,5 +1,7 @@
 package com.childcare.enrollment.service;
 
+import java.time.LocalDate;
+import java.time.Month;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,6 +33,11 @@ public class StudentService {
     }
 
     public Student saveStudent(Student student) {
+
+        student.setProjectedExitDate(
+                calculateProjectedExitDate(student.getDateOfBirth())
+        );
+
         return studentRepository.save(student);
     }
 
@@ -42,16 +49,20 @@ public class StudentService {
 
         Student existingStudent = studentRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException(
-                        "Student not found with ID: " + id));
+                        "Student not found with ID: " + id
+                ));
 
         existingStudent.setFirstName(updatedStudent.getFirstName());
         existingStudent.setLastName(updatedStudent.getLastName());
         existingStudent.setDateOfBirth(updatedStudent.getDateOfBirth());
         existingStudent.setEnrollmentDate(updatedStudent.getEnrollmentDate());
+        existingStudent.setClassroom(updatedStudent.getClassroom());
+
         existingStudent.setProjectedExitDate(
-                updatedStudent.getProjectedExitDate());
-        existingStudent.setClassroom(
-                updatedStudent.getClassroom());
+                calculateProjectedExitDate(
+                        updatedStudent.getDateOfBirth()
+                )
+        );
 
         return studentRepository.save(existingStudent);
     }
@@ -60,7 +71,8 @@ public class StudentService {
 
         Student student = studentRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException(
-                        "Student not found with ID: " + id));
+                        "Student not found with ID: " + id
+                ));
 
         student.setActive(false);
         studentRepository.save(student);
@@ -70,9 +82,41 @@ public class StudentService {
 
         Student student = studentRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException(
-                        "Student not found with ID: " + id));
+                        "Student not found with ID: " + id
+                ));
 
         student.setActive(true);
         studentRepository.save(student);
     }
+
+    public LocalDate calculateProjectedExitDate(LocalDate dateOfBirth) {
+
+        if (dateOfBirth == null) {
+            return null;
+        }
+
+        int yearStudentTurnsFive =
+                dateOfBirth.plusYears(5).getYear();
+
+        return LocalDate.of(
+                yearStudentTurnsFive,
+                Month.AUGUST,
+                25
+        );
+    }
+
+    public List<Student> searchActiveStudents(String searchTerm) {
+
+    if (searchTerm == null || searchTerm.isBlank()) {
+        return getActiveStudents();
+    }
+
+    String cleanedSearchTerm = searchTerm.trim();
+
+    return studentRepository
+            .findByActiveTrueAndFirstNameContainingIgnoreCaseOrActiveTrueAndLastNameContainingIgnoreCaseOrderByLastNameAscFirstNameAsc(
+                    cleanedSearchTerm,
+                    cleanedSearchTerm
+            );
+}
 }

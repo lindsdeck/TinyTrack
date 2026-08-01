@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/header :: header('TinyTrack | Future Enrollment')}">
+</head>
+
+<body>
+
+<div th:replace="~{fragments/navigation :: navigation}"></div>
+
+<main class="container">
+
+    <section class="page-heading-row">
+
+        <div>
+
+            <h1>Future Enrollment</h1>
+
+            <p>
+                Project classroom enrollment based on student age,
+                enrollment dates, departure dates, and licensed capacity.
+            </p>
+
+        </div>
+
+    </section>
+
+    <section class="panel projection-date-panel">
+
+        <form
+            th:action="@{/future-enrollment}"
+            method="get"
+            class="projection-date-form">
+
+            <div class="form-group projection-date-group">
+
+                <label for="projectionDate">
+                    Select Projection Date
+                </label>
+
+                <input
+                    id="projectionDate"
+                    name="projectionDate"
+                    type="date"
+                    th:value="${projectionDate}"
+                    required>
+
+            </div>
+
+            <button type="submit" class="button">
+                Calculate Projection
+            </button>
+
+        </form>
+
+    </section>
+
+    <section class="projection-summary">
+
+        <article class="dashboard-card">
+
+            <h2>Projected Students</h2>
+
+            <div
+                class="dashboard-number"
+                th:text="${projection.totalProjectedEnrollment}">
+                0
+            </div>
+
+            <p>Expected to be enrolled</p>
+
+        </article>
+
+        <article class="dashboard-card">
+
+            <h2>Licensed Capacity</h2>
+
+            <div
+                class="dashboard-number"
+                th:text="${projection.totalLicensedCapacity}">
+                0
+            </div>
+
+            <p>Total classroom spaces</p>
+
+        </article>
+
+        <article class="dashboard-card">
+
+            <h2>Projected Openings</h2>
+
+            <div
+                class="dashboard-number"
+                th:text="${projection.totalProjectedOpenings}">
+                0
+            </div>
+
+            <p>Available spaces</p>
+
+        </article>
+
+        <article class="dashboard-card">
+
+            <h2>Projected Exits</h2>
+
+            <div
+                class="dashboard-number"
+                th:text="${projection.exitedStudentCount}">
+                0
+            </div>
+
+            <p>Students who have departed</p>
+
+        </article>
+
+    </section>
+
+    <section class="dashboard-section">
+
+        <div class="projection-section-heading">
+
+            <div>
+
+                <h2>Classroom Projection</h2>
+
+                <p
+                    th:text="'Projected enrollment for '
+                        + ${#temporals.format(
+                            projection.projectionDate,
+                            'MMMM d, yyyy'
+                        )}">
+                    Projected enrollment date
+                </p>
+
+            </div>
+
+        </div>
+
+        <div class="classroom-projection-grid">
+
+            <article
+                class="classroom-projection-card"
+                th:each="classroomProjection
+                    : ${projection.classroomProjections}">
+
+                <div class="projection-card-heading">
+
+                    <div>
+
+                        <h3
+                            th:text="${classroomProjection
+                                .classroom.classroomName}">
+                            Classroom
+                        </h3>
+
+                        <p
+                            th:text="${classroomProjection
+                                .classroom.minimumAgeMonths == 0
+                                ? 'Birth–'
+                                    + classroomProjection
+                                        .classroom.maximumAgeMonths
+                                    + ' months'
+                                : classroomProjection
+                                        .classroom.minimumAgeMonths
+                                    + '–'
+                                    + classroomProjection
+                                        .classroom.maximumAgeMonths
+                                    + ' months'}">
+                            Age Range
+                        </p>
+
+                    </div>
+
+                    <span
+                        class="projection-status-badge"
+                        th:classappend="${classroomProjection.full}
+                            ? ' projection-full'
+                            : ' projection-open'"
+                        th:text="${classroomProjection.full
+                            ? 'Full'
+                            : classroomProjection.projectedOpenings
+                                + ' Open'}">
+                        Open
+                    </span>
+
+                </div>
+
+                <div class="projection-metrics">
+
+                    <div>
+
+                        <span class="projection-label">
+                            Students
+                        </span>
+
+                        <strong
+                            th:text="${classroomProjection
+                                .projectedEnrollment}">
+                            0
+                        </strong>
+
+                    </div>
+
+                    <div>
+
+                        <span class="projection-label">
+                            Capacity
+                        </span>
+
+                        <strong
+                            th:text="${classroomProjection
+                                .licensedCapacity}">
+                            0
+                        </strong>
+
+                    </div>
+
+                    <div>
+
+                        <span class="projection-label">
+                            Openings
+                        </span>
+
+                        <strong
+                            th:text="${classroomProjection
+                                .projectedOpenings}">
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+                <details class="projected-student-details">
+
+                    <summary>
+                        View Projected Students
+                    </summary>
+
+                    <div
+                        class="projected-student-list"
+                        th:if="${!#lists.isEmpty(
+                            classroomProjection.projectedStudents
+                        )}">
+
+                        <div
+                            class="projected-student-row"
+                            th:each="projectedStudent
+                                : ${classroomProjection.projectedStudents}">
+
+                            <div>
+
+                                <strong
+                                    th:text="${projectedStudent
+                                        .student.firstName
+                                        + ' '
+                                        + projectedStudent
+                                            .student.lastName}">
+                                    Student Name
+                                </strong>
+
+                                <span
+                                    th:text="${projectedStudent.displayAge}">
+                                    Age
+                                </span>
+
+                            </div>
+
+                            <span
+                                class="projection-movement-badge"
+                                th:classappend="${projectedStudent
+                                    .status.name()
+                                    == 'HELD_FOR_CAPACITY'}
+                                    ? ' movement-held'
+                                    : (${projectedStudent
+                                        .status.name()
+                                        == 'PROMOTED'}
+                                        ? ' movement-promoted'
+                                        : ' movement-normal')"
+                                th:text="${projectedStudent
+                                    .status.name()
+                                    == 'HELD_FOR_CAPACITY'}
+                                    ? 'Held'
+                                    : (${projectedStudent
+                                        .status.name()
+                                        == 'PROMOTED'}
+                                        ? 'Promoted'
+                                        : 'Expected')">
+                                Expected
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    <p
+                        class="empty-projection-message"
+                        th:if="${#lists.isEmpty(
+                            classroomProjection.projectedStudents
+                        )}">
+                        No students are projected for this classroom.
+                    </p>
+
+                </details>
+
+            </article>
+
+        </div>
+
+    </section>
+
+    <section
+        class="panel dashboard-section projection-warning-panel"
+        th:if="${projection.hasWarnings()}">
+
+        <h2>Projection Notes</h2>
+
+        <ul>
+
+            <li
+                th:each="warning : ${projection.warnings}"
+                th:text="${warning}">
+                Projection warning
+            </li>
+
+        </ul>
+
+    </section>
+
+    <section
+        class="panel dashboard-section"
+        th:if="${projection.unplacedStudentCount > 0}">
+
+        <h2>Students Needing Review</h2>
+
+        <p>
+            These students could not be placed within current
+            licensed classroom capacity.
+        </p>
+
+        <ul class="unplaced-student-list">
+
+            <li
+                th:each="student : ${projection.unplacedStudents}"
+                th:text="${student.firstName + ' ' + student.lastName}">
+                Student Name
+            </li>
+
+        </ul>
+
+    </section>
+
+</main>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+</body>
+
+</html>

@@ -96,4 +96,13 @@ public class ClassroomService {
             .mapToInt(Classroom::getLicensedCapacity)
             .sum();
 }
+
+public Classroom getActiveClassroomByName(String classroomName) {
+
+    return classroomRepository
+            .findByClassroomNameIgnoreCaseAndActiveTrue(classroomName)
+            .orElseThrow(() -> new IllegalArgumentException(
+                    "Active classroom not found: " + classroomName
+            ));
+}
 }
