@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/header :: header('TinyTrack | Students')}">
+</head>
+
+<body>
+
+<div th:replace="~{fragments/navigation :: navigation}"></div>
+
+<main class="container">
+
+    <section class="page-heading-row">
+
+        <div>
+
+            <h1>Students</h1>
+
+            <p>
+                View and manage active student enrollment records.
+            </p>
+
+        </div>
+
+        <a th:href="@{/students/new}" class="button">
+            + Add Student
+        </a>
+
+    </section>
+
+    <section class="panel">
+
+        <div class="table-header-row">
+
+            <h2>Active Students</h2>
+
+            <span class="record-count"
+                  th:text="${#lists.size(students)} + ' Student(s)'">
+                0 Student(s)
+            </span>
+
+        </div>
+
+        <div class="table-responsive">
+
+            <table class="data-table">
+
+                <thead>
+
+                <tr>
+
+                    <th>Name</th>
+                    <th>Date of Birth</th>
+                    <th>Enrollment Date</th>
+                    <th>Projected Exit</th>
+                    <th>Classroom</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+
+                </tr>
+
+                </thead>
+
+                <tbody>
+
+                <tr th:if="${#lists.isEmpty(students)}">
+
+                    <td colspan="7" class="empty-state">
+
+                        No active students have been added yet.
+
+                    </td>
+
+                </tr>
+
+                <tr th:each="student : ${students}">
+
+                    <td th:text="${student.firstName + ' ' + student.lastName}">
+                        Student Name
+                    </td>
+
+                    <td th:text="${#temporals.format(student.dateOfBirth,'MM/dd/yyyy')}">
+                    </td>
+
+                    <td th:text="${#temporals.format(student.enrollmentDate,'MM/dd/yyyy')}">
+                    </td>
+
+                    <td th:text="${student.projectedExitDate != null ?
+                        #temporals.format(student.projectedExitDate,'MM/dd/yyyy') :
+                        'Not Set'}">
+                    </td>
+
+                    <td th:text="${student.classroomName}">
+                    </td>
+
+                    <td>
+
+                        <span class="status-badge status-active">
+
+                            Active
+
+                        </span>
+
+                    </td>
+
+                    <td class="action-cell">
+
+                        <a th:href="@{/students/{id}/edit(id=${student.id})}"
+                           class="table-action">
+
+                            Edit
+
+                        </a>
+
+                        <form th:action="@{/students/{id}/deactivate(id=${student.id})}"
+                              method="post">
+
+                            <button
+                                    type="submit"
+                                    class="table-action danger-action">
+
+                                Inactivate
+
+                            </button>
+
+                        </form>
+
+                    </td>
+
+                </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+</main>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+</body>
+
+</html>

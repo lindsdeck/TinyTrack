@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/header :: header('TinyTrack | Student')}">
+</head>
+
+<body>
+
+<div th:replace="~{fragments/navigation :: navigation}"></div>
+
+<main class="container">
+
+    <section class="page-heading-row">
+
+        <div>
+
+            <h1 th:text="${student.id == null ? 'Add Student' : 'Edit Student'}">
+                Add Student
+            </h1>
+
+            <p th:text="${student.id == null ?
+            'Enter the student information below.' :
+            'Update the student information below.'}">
+            </p>
+
+        </div>
+
+    </section>
+
+    <section class="panel form-panel">
+
+        <form th:action="${student.id == null}
+                         ? @{/students/save}
+                         : @{/students/{id}/update(id=${student.id})}"
+
+              th:object="${student}"
+
+              method="post">
+
+            <div class="form-grid">
+
+                <div class="form-group">
+
+                    <label>First Name</label>
+
+                    <input
+                            type="text"
+                            th:field="*{firstName}">
+
+                    <p class="field-error"
+                       th:errors="*{firstName}">
+                    </p>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Last Name</label>
+
+                    <input
+                            type="text"
+                            th:field="*{lastName}">
+
+                    <p class="field-error"
+                       th:errors="*{lastName}">
+                    </p>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Date of Birth</label>
+
+                    <input
+                            type="date"
+                            th:field="*{dateOfBirth}">
+
+                    <p class="field-error"
+                       th:errors="*{dateOfBirth}">
+                    </p>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Enrollment Date</label>
+
+                    <input
+                            type="date"
+                            th:field="*{enrollmentDate}">
+
+                    <p class="field-error"
+                       th:errors="*{enrollmentDate}">
+                    </p>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Projected Exit Date</label>
+
+                    <input
+                            type="date"
+                            th:field="*{projectedExitDate}">
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Classroom</label>
+
+                    <input
+                            type="text"
+                            th:field="*{classroomName}">
+
+                </div>
+
+            </div>
+
+            <div class="form-actions">
+
+                <a th:href="@{/students}"
+                   class="button secondary-button">
+
+                    Cancel
+
+                </a>
+
+                <button
+                        type="submit"
+                        class="button">
+
+                    <span th:text="${student.id == null ? 'Save Student' : 'Update Student'}">
+                        Save Student
+                    </span>
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </section>
+
+</main>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+</body>
+
+</html>
