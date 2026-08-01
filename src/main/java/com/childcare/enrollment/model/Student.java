@@ -9,6 +9,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -48,9 +50,10 @@ public class Student {
     @Column(name = "projected_exit_date")
     private LocalDate projectedExitDate;
 
-    @Size(max = 75, message = "Classroom name cannot exceed 75 characters.")
-    @Column(name = "classroom_name", length = 75)
-    private String classroomName;
+    @NotNull(message = "Classroom is required.")
+    @ManyToOne
+    @JoinColumn(name = "classroom_id", nullable = false)
+    private Classroom classroom;
 
     @Column(nullable = false)
     private boolean active = true;
@@ -64,14 +67,14 @@ public class Student {
             LocalDate dateOfBirth,
             LocalDate enrollmentDate,
             LocalDate projectedExitDate,
-            String classroomName) {
+            Classroom classroom) {
 
         this.firstName = firstName;
         this.lastName = lastName;
         this.dateOfBirth = dateOfBirth;
         this.enrollmentDate = enrollmentDate;
         this.projectedExitDate = projectedExitDate;
-        this.classroomName = classroomName;
+        this.classroom = classroom;
         this.active = true;
     }
 
@@ -123,12 +126,12 @@ public class Student {
         this.projectedExitDate = projectedExitDate;
     }
 
-    public String getClassroomName() {
-        return classroomName;
+    public Classroom getClassroom() {
+        return classroom;
     }
 
-    public void setClassroomName(String classroomName) {
-        this.classroomName = classroomName;
+    public void setClassroom(Classroom classroom) {
+        this.classroom = classroom;
     }
 
     public boolean isActive() {

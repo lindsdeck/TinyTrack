@@ -107,13 +107,39 @@
 
                 <div class="form-group">
 
-                    <label>Classroom</label>
+    <label for="classroom">
+        Classroom
+    </label>
 
-                    <input
-                            type="text"
-                            th:field="*{classroomName}">
+    <select
+        id="classroom"
+        th:field="*{classroom}">
 
-                </div>
+        <option value="">
+            Select a classroom
+        </option>
+
+        <option
+            th:each="classroomOption : ${classrooms}"
+            th:value="${classroomOption.id}"
+            th:text="${classroomOption.classroomName
+                + ' (' 
+                + classroomOption.minimumAgeMonths
+                + '–'
+                + classroomOption.maximumAgeMonths
+                + ' months)'}">
+            Classroom
+        </option>
+
+    </select>
+
+    <p
+        class="field-error"
+        th:if="${#fields.hasErrors('classroom')}"
+        th:errors="*{classroom}">
+    </p>
+
+</div>
 
             </div>
 

@@ -50,8 +50,8 @@ public class StudentService {
         existingStudent.setEnrollmentDate(updatedStudent.getEnrollmentDate());
         existingStudent.setProjectedExitDate(
                 updatedStudent.getProjectedExitDate());
-        existingStudent.setClassroomName(
-                updatedStudent.getClassroomName());
+        existingStudent.setClassroom(
+                updatedStudent.getClassroom());
 
         return studentRepository.save(existingStudent);
     }

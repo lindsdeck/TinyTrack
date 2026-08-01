@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.childcare.enrollment.model.Student;
+import com.childcare.enrollment.service.ClassroomService;
 import com.childcare.enrollment.service.StudentService;
 
 import jakarta.validation.Valid;
@@ -17,9 +18,14 @@ import jakarta.validation.Valid;
 public class StudentController {
 
     private final StudentService studentService;
+    private final ClassroomService classroomService;
 
-    public StudentController(StudentService studentService) {
+    public StudentController(
+            StudentService studentService,
+            ClassroomService classroomService) {
+
         this.studentService = studentService;
+        this.classroomService = classroomService;
     }
 
     @GetMapping("/students")
@@ -39,7 +45,8 @@ public class StudentController {
     public String showAddStudentForm(Model model) {
 
         model.addAttribute("student", new Student());
-        model.addAttribute("activePage", "students");
+
+        addClassroomsToModel(model);
 
         return "student-form";
     }
@@ -51,7 +58,7 @@ public class StudentController {
             Model model) {
 
         if (bindingResult.hasErrors()) {
-            model.addAttribute("activePage", "students");
+            addClassroomsToModel(model);
             return "student-form";
         }
 
@@ -71,7 +78,8 @@ public class StudentController {
                 ));
 
         model.addAttribute("student", student);
-        model.addAttribute("activePage", "students");
+
+        addClassroomsToModel(model);
 
         return "student-form";
     }
@@ -85,7 +93,7 @@ public class StudentController {
 
         if (bindingResult.hasErrors()) {
             student.setId(id);
-            model.addAttribute("activePage", "students");
+            addClassroomsToModel(model);
             return "student-form";
         }
 
@@ -100,5 +108,15 @@ public class StudentController {
         studentService.deactivateStudent(id);
 
         return "redirect:/students";
+    }
+
+    private void addClassroomsToModel(Model model) {
+
+        model.addAttribute(
+                "classrooms",
+                classroomService.getActiveClassrooms()
+        );
+
+        model.addAttribute("activePage", "students");
     }
 }

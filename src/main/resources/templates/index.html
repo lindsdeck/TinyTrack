@@ -25,55 +25,63 @@
     <!-- Dashboard Cards -->
     <section class="dashboard-grid">
 
-        <article class="dashboard-card">
+    <article class="dashboard-card">
 
-            <h2>Total Students</h2>
+        <h2>Total Students</h2>
 
-            <div class="dashboard-number">
-                0
-            </div>
+        <div
+            class="dashboard-number"
+            th:text="${dashboard.activeStudentCount}">
+            0
+        </div>
 
-            <p>Currently Active</p>
+        <p>Currently Active</p>
 
-        </article>
+    </article>
 
-        <article class="dashboard-card">
+    <article class="dashboard-card">
 
-            <h2>Classrooms</h2>
+        <h2>Classrooms</h2>
 
-            <div class="dashboard-number">
-                0
-            </div>
+        <div
+            class="dashboard-number"
+            th:text="${dashboard.activeClassroomCount}">
+            0
+        </div>
 
-            <p>Active Rooms</p>
+        <p>Active Rooms</p>
 
-        </article>
+    </article>
 
-        <article class="dashboard-card">
+    <article class="dashboard-card">
 
-            <h2>Current Openings</h2>
+        <h2>Licensed Capacity</h2>
 
-            <div class="dashboard-number">
-                0
-            </div>
+        <div
+            class="dashboard-number"
+            th:text="${dashboard.totalLicensedCapacity}">
+            0
+        </div>
 
-            <p>Available Today</p>
+        <p>Total Available Spaces</p>
 
-        </article>
+    </article>
 
-        <article class="dashboard-card">
+    <article class="dashboard-card">
 
-            <h2>Future Openings</h2>
+        <h2>Current Openings</h2>
 
-            <div class="dashboard-number">
-                0
-            </div>
+        <div
+            class="dashboard-number"
+            th:text="${dashboard.currentOpenings}">
+            0
+        </div>
 
-            <p>Projected Availability</p>
+        <p>Available Today</p>
 
-        </article>
+    </article>
 
-    </section>
+</section>
 
     <!-- Quick Actions -->
     <section class="dashboard-section">
@@ -112,9 +120,6 @@
             TinyTrack is a childcare enrollment management application
             designed to help administrators monitor enrollment,
             classroom capacity, and future openings.
-
-            This dashboard will continue to grow throughout development
-            as new features are added.
 
         </p>
 

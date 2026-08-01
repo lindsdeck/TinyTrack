@@ -88,4 +88,12 @@ public class ClassroomService {
         classroom.setActive(true);
         classroomRepository.save(classroom);
     }
+    public int getTotalActiveLicensedCapacity() {
+
+    return classroomRepository
+            .findByActiveTrueOrderByClassroomNameAsc()
+            .stream()
+            .mapToInt(Classroom::getLicensedCapacity)
+            .sum();
+}
 }

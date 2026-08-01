@@ -90,7 +90,10 @@
                         'Not Set'}">
                     </td>
 
-                    <td th:text="${student.classroomName}">
+                    <td
+                         th:text="${student.classroom != null
+                          ? student.classroom.classroomName
+                        : 'Unassigned'}">
                     </td>
 
                     <td>
