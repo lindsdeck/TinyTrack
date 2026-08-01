@@ -1,17 +1,130 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TinyTrack | Childcare Enrollment Management</title>
-</head>
-<body>
-    <h1>TinyTrack</h1>
-    <h2>Childcare enrollment made simple.</h2>
+<html xmlns:th="http://www.thymeleaf.org">
 
-    <p>
-        Manage student enrollment, organize classrooms, track current
-        openings, and plan for future availability in one convenient place.
-    </p>
+<head th:replace="~{fragments/header :: header('TinyTrack | Dashboard')}">
+</head>
+
+<body>
+
+<!-- Navigation -->
+<div th:replace="~{fragments/navigation :: navigation}"></div>
+
+<main class="container">
+
+    <!-- Dashboard Header -->
+    <section class="dashboard-header">
+
+        <h1>Current Enrollment</h1>
+
+        <p>
+            View a quick summary of enrollment and classroom availability.
+        </p>
+
+    </section>
+
+    <!-- Dashboard Cards -->
+    <section class="dashboard-grid">
+
+        <article class="dashboard-card">
+
+            <h2>Total Students</h2>
+
+            <div class="dashboard-number">
+                0
+            </div>
+
+            <p>Currently Active</p>
+
+        </article>
+
+        <article class="dashboard-card">
+
+            <h2>Classrooms</h2>
+
+            <div class="dashboard-number">
+                0
+            </div>
+
+            <p>Active Rooms</p>
+
+        </article>
+
+        <article class="dashboard-card">
+
+            <h2>Current Openings</h2>
+
+            <div class="dashboard-number">
+                0
+            </div>
+
+            <p>Available Today</p>
+
+        </article>
+
+        <article class="dashboard-card">
+
+            <h2>Future Openings</h2>
+
+            <div class="dashboard-number">
+                0
+            </div>
+
+            <p>Projected Availability</p>
+
+        </article>
+
+    </section>
+
+    <!-- Quick Actions -->
+    <section class="dashboard-section">
+
+        <h2>Quick Actions</h2>
+
+        <div class="quick-actions">
+
+            <a th:href="@{/students}" class="button">
+                Manage Students
+            </a>
+
+            <a th:href="@{/classrooms}" class="button">
+                View Classrooms
+            </a>
+
+            <a th:href="@{/future-enrollment}" class="button">
+                Future Enrollment
+            </a>
+
+            <a th:href="@{/centers}" class="button">
+                Centers
+            </a>
+
+        </div>
+
+    </section>
+
+    <!-- About TinyTrack -->
+    <section class="panel dashboard-section">
+
+        <h2>About TinyTrack</h2>
+
+        <p>
+
+            TinyTrack is a childcare enrollment management application
+            designed to help administrators monitor enrollment,
+            classroom capacity, and future openings.
+
+            This dashboard will continue to grow throughout development
+            as new features are added.
+
+        </p>
+
+    </section>
+
+</main>
+
+<!-- Footer -->
+<div th:replace="~{fragments/footer :: footer}"></div>
+
 </body>
+
 </html>

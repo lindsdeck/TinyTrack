@@ -1,0 +1,443 @@
+/* ===========================================
+   TinyTrack Design System
+   Version 0.2.0
+=========================================== */
+
+:root {
+
+    /* Colors */
+    --background: #3B2A63;
+    --nav-background: #2C1C49;
+    --panel: #5B21E5;
+    --panel-light: #7139FF;
+
+    --button: #B6A7FF;
+    --button-hover: #9D8BFF;
+
+    --table-header: #DDD5FF;
+
+    --white: #FFFFFF;
+    --text-dark: #1F1F1F;
+
+    --border-light: rgba(255,255,255,.15);
+
+    /* Effects */
+    --shadow: 0 10px 30px rgba(0,0,0,.25);
+    --radius: 18px;
+
+}
+
+/* ===========================================
+   Global
+=========================================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html,
+body{
+
+    min-height:100%;
+    background:var(--background);
+
+    color:var(--white);
+
+    font-family:"Poppins",sans-serif;
+
+}
+
+.container{
+
+    width:90%;
+    max-width:1400px;
+
+    margin:40px auto;
+
+}
+
+/* ===========================================
+   Navigation
+=========================================== */
+
+nav{
+
+    position:sticky;
+    top:0;
+
+    z-index:1000;
+
+    background:var(--nav-background);
+
+    box-shadow:var(--shadow);
+
+    padding:20px 40px;
+
+}
+
+.nav-container{
+
+    max-width:1500px;
+
+    margin:auto;
+
+}
+
+.nav-top{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:40px;
+
+}
+
+.logo-section{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:20px;
+
+}
+
+.logo{
+
+    width:80px;
+
+}
+
+.logo-section h2{
+
+    color:var(--white);
+
+    font-size:2.4rem;
+
+    font-weight:700;
+
+}
+
+.logo-section p{
+
+    color:var(--white);
+
+    opacity:.85;
+
+    margin-top:5px;
+
+}
+
+.nav-links{
+
+    display:flex;
+
+    gap:15px;
+
+    list-style:none;
+
+}
+
+.nav-links a{
+
+    display:block;
+
+    padding:12px 22px;
+
+    min-width:145px;
+
+    text-align:center;
+
+    text-decoration:none;
+
+    border-radius:14px;
+
+    background:var(--button);
+
+    color:var(--text-dark);
+
+    font-weight:600;
+
+    transition:.2s;
+
+}
+
+.nav-links a:hover{
+
+    background:var(--button-hover);
+
+    transform:translateY(-2px);
+
+}
+
+.nav-links a.active{
+
+    background:white;
+
+}
+
+/* ===========================================
+   Dashboard
+=========================================== */
+
+.dashboard-header{
+
+    text-align:center;
+
+    margin-bottom:45px;
+
+}
+
+.dashboard-header h1{
+
+    font-size:3rem;
+
+    margin-bottom:10px;
+
+}
+
+.dashboard-header p{
+
+    opacity:.85;
+
+}
+
+.dashboard-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(4,1fr);
+
+    gap:25px;
+
+}
+
+.dashboard-card{
+
+    background:linear-gradient(
+        145deg,
+        var(--panel),
+        var(--panel-light)
+    );
+
+    border-radius:var(--radius);
+
+    box-shadow:var(--shadow);
+
+    padding:35px;
+
+    text-align:center;
+
+    border:1px solid var(--border-light);
+
+}
+
+.dashboard-card h2{
+
+    font-size:1.1rem;
+
+    margin-bottom:15px;
+
+}
+
+.dashboard-number{
+
+    font-size:3rem;
+
+    font-weight:700;
+
+    margin-bottom:10px;
+
+}
+
+.dashboard-card p{
+
+    opacity:.85;
+
+}
+
+/* ===========================================
+   Sections
+=========================================== */
+
+.dashboard-section{
+
+    margin-top:45px;
+
+}
+
+.dashboard-section h2{
+
+    margin-bottom:20px;
+
+}
+
+/* ===========================================
+   Quick Actions
+=========================================== */
+
+.quick-actions{
+
+    display:flex;
+
+    flex-wrap:wrap;
+
+    gap:15px;
+
+}
+
+.button{
+
+    display:inline-block;
+
+    text-decoration:none;
+
+    background:var(--button);
+
+    color:var(--text-dark);
+
+    padding:14px 28px;
+
+    border-radius:14px;
+
+    font-weight:600;
+
+    transition:.2s;
+
+}
+
+.button:hover{
+
+    background:var(--button-hover);
+
+    transform:translateY(-2px);
+
+}
+
+/* ===========================================
+   Panels
+=========================================== */
+
+.panel{
+
+    background:linear-gradient(
+        145deg,
+        var(--panel),
+        var(--panel-light)
+    );
+
+    padding:30px;
+
+    border-radius:var(--radius);
+
+    box-shadow:var(--shadow);
+
+}
+
+/* ===========================================
+   Tables
+=========================================== */
+
+.data-table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+    overflow:hidden;
+
+    border-radius:var(--radius);
+
+}
+
+.data-table th{
+
+    background:var(--table-header);
+
+    color:var(--text-dark);
+
+}
+
+.data-table th,
+.data-table td{
+
+    padding:16px;
+
+    border:1px solid var(--border-light);
+
+}
+
+.data-table tbody tr{
+
+    background:rgba(255,255,255,.05);
+
+}
+
+.data-table tbody tr:hover{
+
+    background:rgba(255,255,255,.10);
+
+}
+
+/* ===========================================
+   Footer
+=========================================== */
+
+footer{
+
+    margin:60px 0 30px;
+
+    text-align:center;
+
+    opacity:.75;
+
+}
+
+/* ===========================================
+   Responsive
+=========================================== */
+
+@media(max-width:1000px){
+
+    .dashboard-grid{
+
+        grid-template-columns:repeat(2,1fr);
+
+    }
+
+    .nav-top{
+
+        flex-direction:column;
+
+    }
+
+}
+
+@media(max-width:700px){
+
+    .dashboard-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .nav-links{
+
+        flex-direction:column;
+
+        width:100%;
+
+    }
+
+    .nav-links a{
+
+        width:100%;
+
+    }
+
+}

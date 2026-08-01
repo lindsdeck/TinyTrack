@@ -14,11 +14,15 @@ public class CenterController {
         this.centerService = centerService;
     }
 
-    @GetMapping("/centers")
+        @GetMapping("/centers")
     public String viewCenters(Model model) {
 
-        model.addAttribute("centers",
-                centerService.getActiveCenters());
+          model.addAttribute(
+               "centers",
+               centerService.getActiveCenters()
+         );
+
+         model.addAttribute("activePage", "centers");
 
         return "centers";
     }

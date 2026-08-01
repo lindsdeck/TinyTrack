@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+<nav th:fragment="navigation">
+
+    <div class="nav-container">
+
+        <div class="nav-top">
+
+            <div class="logo-section">
+
+                <img th:src="@{/images/logo.png}"
+                     alt="TinyTrack Logo"
+                     class="logo">
+
+                <div>
+                    <h2>TinyTrack</h2>
+                    <p>Childcare Enrollment Made Simple</p>
+                </div>
+
+            </div>
+
+            <ul class="nav-links">
+
+                <li>
+                    <a th:href="@{/}"
+                       th:classappend="${activePage == 'dashboard'} ? ' active' : ''">
+                        Dashboard
+                    </a>
+                </li>
+
+                <li>
+                    <a th:href="@{/students}"
+                       th:classappend="${activePage == 'students'} ? ' active' : ''">
+                        Students
+                    </a>
+                </li>
+
+                <li>
+                    <a th:href="@{/classrooms}"
+                       th:classappend="${activePage == 'classrooms'} ? ' active' : ''">
+                        Classrooms
+                    </a>
+                </li>
+
+                <li>
+                    <a th:href="@{/future-enrollment}"
+                       th:classappend="${activePage == 'future'} ? ' active' : ''">
+                        Future Enrollment
+                    </a>
+                </li>
+
+                <li>
+                    <a th:href="@{/centers}"
+                       th:classappend="${activePage == 'centers'} ? ' active' : ''">
+                        Centers
+                    </a>
+                </li>
+
+            </ul>
+
+        </div>
+
+    </div>
+
+</nav>
+
+</body>
+
+</html>

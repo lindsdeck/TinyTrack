@@ -1,36 +1,56 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head>
-    <title>TinyTrack | Centers</title>
+<head th:replace="~{fragments/header :: header('TinyTrack | Centers')}">
 </head>
 
 <body>
 
-<h1>Centers</h1>
+<div th:replace="~{fragments/navigation :: navigation}"></div>
 
-<table border="1">
+<main class="container">
 
-    <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>City</th>
-        <th>State</th>
-    </tr>
+    <h1 class="page-title">Center Information</h1>
 
-    <tr th:each="center : ${centers}">
+    <section class="panel">
 
-        <td th:text="${center.id}"></td>
+        <table class="data-table">
 
-        <td th:text="${center.centerName}"></td>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Address</th>
+                    <th>City</th>
+                    <th>State</th>
+                    <th>Phone</th>
+                </tr>
+            </thead>
 
-        <td th:text="${center.city}"></td>
+            <tbody>
 
-        <td th:text="${center.state}"></td>
+                <tr th:each="center : ${centers}">
 
-    </tr>
+                    <td th:text="${center.centerName}"></td>
 
-</table>
+                    <td th:text="${center.address}"></td>
+
+                    <td th:text="${center.city}"></td>
+
+                    <td th:text="${center.state}"></td>
+
+                    <td th:text="${center.phoneNumber}"></td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </section>
+
+</main>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
 
 </body>
 
