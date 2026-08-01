@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>TinyTrack | Centers</title>
+</head>
+
+<body>
+
+<h1>Centers</h1>
+
+<table border="1">
+
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>City</th>
+        <th>State</th>
+    </tr>
+
+    <tr th:each="center : ${centers}">
+
+        <td th:text="${center.id}"></td>
+
+        <td th:text="${center.centerName}"></td>
+
+        <td th:text="${center.city}"></td>
+
+        <td th:text="${center.state}"></td>
+
+    </tr>
+
+</table>
+
+</body>
+
+</html>
