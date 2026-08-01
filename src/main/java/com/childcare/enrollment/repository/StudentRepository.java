@@ -27,4 +27,9 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
             String lastName,
             LocalDate dateOfBirth
     );
+
+    long countByActiveTrueAndEnrollmentDateLessThanEqualAndProjectedExitDateGreaterThanEqual(
+        LocalDate enrollmentDate,
+        LocalDate projectedExitDate
+);
 }

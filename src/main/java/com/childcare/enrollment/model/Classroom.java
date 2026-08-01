@@ -14,6 +14,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.persistence.OneToMany;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -139,8 +140,18 @@ public void setStudents(List<Student> students) {
 
 public long getActiveEnrollment() {
 
+    LocalDate today = LocalDate.now();
+
     return students.stream()
             .filter(Student::isActive)
+            .filter(student ->
+                    student.getEnrollmentDate() != null
+                    && !student.getEnrollmentDate().isAfter(today)
+            )
+            .filter(student ->
+                    student.getProjectedExitDate() == null
+                    || !student.getProjectedExitDate().isBefore(today)
+            )
             .count();
 }
 

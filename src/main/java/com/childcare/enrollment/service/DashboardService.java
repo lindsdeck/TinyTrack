@@ -21,7 +21,7 @@ public class DashboardService {
     public DashboardSummary getDashboardSummary() {
 
         long activeStudentCount =
-                studentService.countActiveStudents();
+                studentService.countCurrentlyEnrolledStudents();
 
         long activeClassroomCount =
                 classroomService.countActiveClassrooms();

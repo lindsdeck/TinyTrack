@@ -119,4 +119,15 @@ public class StudentService {
                     cleanedSearchTerm
             );
 }
+
+public long countCurrentlyEnrolledStudents() {
+
+    LocalDate today = LocalDate.now();
+
+    return studentRepository
+            .countByActiveTrueAndEnrollmentDateLessThanEqualAndProjectedExitDateGreaterThanEqual(
+                    today,
+                    today
+            );
+}
 }
