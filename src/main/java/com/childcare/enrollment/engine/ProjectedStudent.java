@@ -10,19 +10,22 @@ public class ProjectedStudent {
     private final Classroom projectedClassroom;
     private final Classroom ageEligibleClassroom;
     private final ProjectionStatus status;
+    private final boolean transitionWithinOneMonth;
 
     public ProjectedStudent(
             Student student,
             int ageInMonths,
             Classroom projectedClassroom,
             Classroom ageEligibleClassroom,
-            ProjectionStatus status) {
+            ProjectionStatus status,
+            boolean transitionWithinOneMonth) {
 
         this.student = student;
         this.ageInMonths = ageInMonths;
         this.projectedClassroom = projectedClassroom;
         this.ageEligibleClassroom = ageEligibleClassroom;
         this.status = status;
+        this.transitionWithinOneMonth = transitionWithinOneMonth;
     }
 
     public Student getStudent() {
@@ -43,6 +46,25 @@ public class ProjectedStudent {
 
     public ProjectionStatus getStatus() {
         return status;
+    }
+
+    public boolean isTransitionWithinOneMonth() {
+        return transitionWithinOneMonth;
+    }
+
+    public String getDisplayName() {
+
+        String lastInitial = "";
+
+        if (student.getLastName() != null
+                && !student.getLastName().isBlank()) {
+
+            lastInitial = " "
+                    + student.getLastName().substring(0, 1)
+                    + ".";
+        }
+
+        return student.getFirstName() + lastInitial;
     }
 
     public int getAgeYears() {

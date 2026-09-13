@@ -27,6 +27,8 @@ public class FutureEnrollmentController {
             @RequestParam(required = false)
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
             LocalDate projectionDate,
+            @RequestParam(required = false, defaultValue = "openings")
+            String view,
             Model model) {
 
         model.addAttribute("activePage", "future");
@@ -35,11 +37,16 @@ public class FutureEnrollmentController {
             projectionDate = LocalDate.now().plusMonths(1);
         }
 
+        if (!"month-to-month".equals(view)) {
+            view = "openings";
+        }
+
         ProjectionResult projection =
                 projectionEngine.createProjection(projectionDate);
 
         model.addAttribute("projectionDate", projectionDate);
         model.addAttribute("projection", projection);
+        model.addAttribute("projectionView", view);
 
         return "future-enrollment";
     }

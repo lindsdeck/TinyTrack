@@ -975,3 +975,301 @@ footer{
 }
 
 }
+
+/* ===========================================
+   Future Enrollment Tabs
+=========================================== */
+
+.projection-tabs {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.projection-tabs a {
+    display: inline-block;
+    padding: 13px 25px;
+    border: 2px solid var(--button);
+    border-radius: 12px;
+    background: transparent;
+    color: var(--white);
+    font-weight: 600;
+    text-decoration: none;
+    transition: 0.2s;
+}
+
+.projection-tabs a:hover {
+    background: rgba(255, 255, 255, 0.12);
+    transform: translateY(-2px);
+}
+
+.projection-tabs a.active {
+    background: var(--button);
+    color: var(--text-dark);
+}
+
+
+/* ===========================================
+   Month-to-Month Classroom List
+=========================================== */
+
+.month-roster-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 24px;
+    margin-bottom: 20px;
+}
+
+.month-roster-legend {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 12px 20px;
+    font-size: 0.82rem;
+}
+
+.month-roster-legend span {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.legend-color {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    border: 1px solid rgba(31, 31, 31, 0.3);
+    border-radius: 4px;
+}
+
+.legend-color.transition-soon {
+    background: #fff0a8;
+}
+
+.legend-color.capacity-hold {
+    background: #ffc2c9;
+}
+
+
+
+.month-roster-scroll {
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 14px;
+}
+
+.month-roster-board {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(215px, 1fr));
+    min-width: 1120px;
+    overflow: hidden;
+    border: 1px solid #cfc8df;
+    border-radius: 18px;
+    background: var(--white);
+    color: var(--text-dark);
+    box-shadow: var(--shadow);
+}
+
+.month-classroom-column {
+    min-width: 0;
+    border-right: 1px solid #cfc8df;
+}
+
+.month-classroom-column:last-child {
+    border-right: none;
+}
+
+
+
+.month-classroom-column > header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    min-height: 65px;
+    padding: 14px;
+    border-bottom: 2px solid var(--panel);
+    background: var(--table-header);
+}
+
+.month-classroom-column h3 {
+    margin: 0;
+    font-size: 1.05rem;
+}
+
+.month-classroom-column header span {
+    flex-shrink: 0;
+    padding: 5px 9px;
+    border-radius: 14px;
+    background: var(--panel);
+    color: var(--white);
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+
+
+.month-roster-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.82rem;
+}
+
+.month-roster-table th,
+.month-roster-table td {
+    height: 40px;
+    padding: 8px 7px;
+    border-right: 1px solid #e0dce8;
+    border-bottom: 1px solid #e0dce8;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.month-roster-table th:last-child,
+.month-roster-table td:last-child {
+    border-right: none;
+}
+
+.month-roster-table th {
+    background: #f4f1fc;
+    font-size: 0.72rem;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+}
+
+.month-roster-table th:first-child,
+.month-roster-table td:first-child {
+    width: 34px;
+    text-align: center;
+}
+
+.month-roster-table tbody tr:nth-child(even) {
+    background: #faf9fd;
+}
+
+
+.month-roster-table tbody tr.transition-soon-row {
+    background: #fff0a8;
+    color: var(--text-dark);
+}
+
+
+.month-roster-table tbody tr.capacity-hold-row {
+    background: #ffc2c9;
+    color: #651c27;
+    font-weight: 600;
+}
+
+.month-roster-empty td {
+    color: #6e6878;
+    font-style: italic;
+    text-align: center;
+}
+
+
+
+@media (max-width: 700px) {
+
+    .projection-tabs {
+        flex-direction: column;
+    }
+
+    .projection-tabs a {
+        width: 100%;
+        text-align: center;
+    }
+
+    .month-roster-heading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .month-roster-legend {
+        justify-content: flex-start;
+    }
+}
+
+/* ===========================================
+   Upcoming Classroom Enrollments
+=========================================== */
+
+.upcoming-section-spacer td {
+    height: 16px;
+    padding: 0;
+    border: none;
+    background: var(--white);
+}
+
+.upcoming-section-heading td {
+    padding: 9px 8px;
+    background: #c7dcff;
+    color: #243653;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    text-align: center !important;
+    text-transform: uppercase;
+}
+
+.month-roster-table tbody tr.upcoming-student-row {
+    background: #e4efff;
+    color: #243653;
+}
+
+.month-roster-table tbody tr.upcoming-student-row:nth-child(even) {
+    background: #d9e9ff;
+}
+
+.upcoming-student-row td:first-child {
+    color: #5b21e5;
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.upcoming-student-row strong {
+    display: block;
+    font-size: 0.82rem;
+}
+
+.upcoming-student-row small {
+    display: block;
+    margin-top: 2px;
+    color: #4d6080;
+    font-size: 0.68rem;
+    font-weight: 600;
+}
+
+
+/* ===========================================
+   Complete Future Enrollment List
+=========================================== */
+
+.future-enrollment-list {
+    margin-top: 40px;
+}
+
+.future-enrollment-list .table-header-row {
+    align-items: flex-end;
+}
+
+.future-enrollment-list .table-header-row h2 {
+    margin-bottom: 5px;
+}
+
+.future-enrollment-list .table-header-row p {
+    font-size: 0.9rem;
+    opacity: 0.85;
+}
+
+.future-enrollment-table tbody tr {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.future-enrollment-table tbody tr:hover {
+    background: rgba(255, 255, 255, 0.14);
+}
+
+.future-enrollment-table td:nth-child(3) {
+    font-weight: 600;
+}

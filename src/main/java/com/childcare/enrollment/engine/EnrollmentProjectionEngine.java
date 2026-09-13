@@ -49,11 +49,11 @@ public class EnrollmentProjectionEngine {
                 createClassroomProjections(classrooms, result);
 
         List<Student> eligibleStudents =
-                getStudentsEligibleOnDate(
-                        projectionDate,
-                        result
-                );
-
+        getStudentsEligibleOnDate(
+                projectionDate,
+                result,
+                projectionsByClassroomId
+        );
         eligibleStudents.sort(
                 Comparator.comparing(Student::getDateOfBirth)
         );
@@ -115,19 +115,45 @@ public class EnrollmentProjectionEngine {
     }
 
     private List<Student> getStudentsEligibleOnDate(
-            LocalDate projectionDate,
-            ProjectionResult result) {
+        LocalDate projectionDate,
+        ProjectionResult result,
+        Map<Long, ClassroomProjection> projectionsByClassroomId) {
 
         List<Student> eligibleStudents = new ArrayList<>();
 
         for (Student student : studentService.getActiveStudents()) {
 
             if (student.getEnrollmentDate() != null
-                    && student.getEnrollmentDate()
-                            .isAfter(projectionDate)) {
+        && student.getEnrollmentDate()
+                .isAfter(projectionDate)) {
 
-                continue;
-            }
+    
+    result.addFutureEnrollmentStudent(student);
+
+    
+    LocalDate fiveWeekCutoff =
+            projectionDate.plusWeeks(5);
+
+    boolean beginsWithinFiveWeeks =
+            !student.getEnrollmentDate()
+                    .isAfter(fiveWeekCutoff);
+
+    if (beginsWithinFiveWeeks
+            && student.getClassroom() != null
+            && student.getClassroom().getId() != null) {
+
+        ClassroomProjection classroomProjection =
+                projectionsByClassroomId.get(
+                        student.getClassroom().getId()
+                );
+
+        if (classroomProjection != null) {
+            classroomProjection.addUpcomingStudent(student);
+        }
+    }
+
+    continue;
+}
 
             if (student.getProjectedExitDate() != null
                     && projectionDate.isAfter(
@@ -197,13 +223,7 @@ public class EnrollmentProjectionEngine {
 
         Classroom assignedClassroom = null;
 
-        /*
-         * Classrooms are ordered oldest to youngest.
-         *
-         * Begin with the student's age-eligible classroom.
-         * If it is full, move toward younger classrooms until
-         * an available space is found.
-         */
+
         for (int index = preferredClassroomIndex;
              index < classrooms.size();
              index++) {
@@ -229,31 +249,38 @@ public class EnrollmentProjectionEngine {
                     student.getFirstName()
                             + " "
                             + student.getLastName()
-                            + " could not be placed because "
-                            + "all eligible and younger "
-                            + "classrooms are full."
+                            + " can not move to the next room due to space."
             );
 
             return;
         }
 
         ProjectionStatus status =
-                determineProjectionStatus(
-                        student,
-                        ageEligibleClassroom,
-                        assignedClassroom
-                );
+        determineProjectionStatus(
+                student,
+                ageEligibleClassroom,
+                assignedClassroom
+        );
 
-        ProjectedStudent projectedStudent =
-                new ProjectedStudent(
-                        student,
-                        ageInMonths,
-                        assignedClassroom,
-                        ageEligibleClassroom,
-                        status
-                );
+boolean transitionWithinOneMonth =
+        willTransitionWithinOneMonth(
+                student,
+                projectionDate,
+                assignedClassroom,
+                classrooms,
+                status
+        );
 
-        projectionsByClassroomId
+ProjectedStudent projectedStudent =
+        new ProjectedStudent(
+                student,
+                ageInMonths,
+                assignedClassroom,
+                ageEligibleClassroom,
+                status,
+                transitionWithinOneMonth
+        );
+                projectionsByClassroomId
                 .get(assignedClassroom.getId())
                 .addStudent(projectedStudent);
     }
@@ -266,12 +293,6 @@ public class EnrollmentProjectionEngine {
             return null;
         }
 
-        /*
-         * The oldest active classroom is special.
-         *
-         * Children can remain in Four's after turning five
-         * until their projected August 25 departure date.
-         */
         Classroom oldestClassroom = classrooms.get(0);
 
         if (ageInMonths
@@ -321,6 +342,44 @@ public class EnrollmentProjectionEngine {
         return ProjectionStatus.NORMAL;
     }
 
+    private boolean willTransitionWithinOneMonth(
+        Student student,
+        LocalDate projectionDate,
+        Classroom assignedClassroom,
+        List<Classroom> classrooms,
+        ProjectionStatus status) {
+
+    
+    if (status == ProjectionStatus.HELD_FOR_CAPACITY
+            || student.getDateOfBirth() == null) {
+
+        return false;
+    }
+
+    Classroom nextOlderClassroom = classrooms.stream()
+            .filter(classroom ->
+                    classroom.getMinimumAgeMonths()
+                            > assignedClassroom.getMinimumAgeMonths())
+            .min(Comparator.comparing(
+                    Classroom::getMinimumAgeMonths))
+            .orElse(null);
+
+   
+    if (nextOlderClassroom == null) {
+        return false;
+    }
+
+    LocalDate transitionDate =
+            student.getDateOfBirth().plusMonths(
+                    nextOlderClassroom.getMinimumAgeMonths()
+            );
+
+    return transitionDate.isAfter(projectionDate)
+            && !transitionDate.isAfter(
+                    projectionDate.plusMonths(1)
+            );
+}
+
     private void addCapacityWarnings(ProjectionResult result) {
 
         for (ClassroomProjection projection
@@ -340,8 +399,7 @@ public class EnrollmentProjectionEngine {
 
             result.addWarning(
                     result.getUnplacedStudentCount()
-                            + " student(s) could not be placed "
-                            + "within licensed classroom capacity."
+                            + " student(s) were unable to move up at their birthday."
             );
         }
     }

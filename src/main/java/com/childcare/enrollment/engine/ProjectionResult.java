@@ -3,6 +3,7 @@ package com.childcare.enrollment.engine;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import com.childcare.enrollment.model.Student;
@@ -13,6 +14,7 @@ public class ProjectionResult {
     private final List<ClassroomProjection> classroomProjections;
     private final List<Student> exitedStudents;
     private final List<Student> unplacedStudents;
+    private final List<Student> futureEnrollmentStudents;
     private final List<String> warnings;
 
     public ProjectionResult(LocalDate projectionDate) {
@@ -21,6 +23,7 @@ public class ProjectionResult {
         this.classroomProjections = new ArrayList<>();
         this.exitedStudents = new ArrayList<>();
         this.unplacedStudents = new ArrayList<>();
+        this.futureEnrollmentStudents = new ArrayList<>();
         this.warnings = new ArrayList<>();
     }
 
@@ -40,6 +43,10 @@ public class ProjectionResult {
         return Collections.unmodifiableList(unplacedStudents);
     }
 
+    public List<Student> getFutureEnrollmentStudents() {
+        return Collections.unmodifiableList(futureEnrollmentStudents);
+    }
+
     public List<String> getWarnings() {
         return Collections.unmodifiableList(warnings);
     }
@@ -56,6 +63,18 @@ public class ProjectionResult {
 
     public void addUnplacedStudent(Student student) {
         unplacedStudents.add(student);
+    }
+
+    public void addFutureEnrollmentStudent(Student student) {
+
+        futureEnrollmentStudents.add(student);
+
+        futureEnrollmentStudents.sort(
+                Comparator
+                        .comparing(Student::getEnrollmentDate)
+                        .thenComparing(Student::getLastName)
+                        .thenComparing(Student::getFirstName)
+        );
     }
 
     public void addWarning(String warning) {
@@ -89,6 +108,14 @@ public class ProjectionResult {
 
     public int getUnplacedStudentCount() {
         return unplacedStudents.size();
+    }
+
+    public int getFutureEnrollmentStudentCount() {
+        return futureEnrollmentStudents.size();
+    }
+
+    public boolean hasFutureEnrollmentStudents() {
+        return !futureEnrollmentStudents.isEmpty();
     }
 
     public boolean hasWarnings() {

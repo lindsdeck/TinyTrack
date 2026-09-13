@@ -25,12 +25,45 @@
 
     </section>
 
+        <div
+        class="projection-tabs"
+        role="tablist"
+        aria-label="Future enrollment views">
+
+        <a
+            role="tab"
+            th:classappend="${projectionView == 'openings'} ? ' active'"
+            th:aria-selected="${projectionView == 'openings'}"
+            th:href="@{/future-enrollment(
+                projectionDate=${projectionDate},
+                view='openings'
+            )}">
+            Future Enrollment
+        </a>
+
+        <a
+            role="tab"
+            th:classappend="${projectionView == 'month-to-month'} ? ' active'"
+            th:aria-selected="${projectionView == 'month-to-month'}"
+            th:href="@{/future-enrollment(
+                projectionDate=${projectionDate},
+                view='month-to-month'
+            )}">
+            Month to Month
+        </a>
+
+    </div>
     <section class="panel projection-date-panel">
 
         <form
             th:action="@{/future-enrollment}"
             method="get"
             class="projection-date-form">
+
+                <input
+                type="hidden"
+                name="view"
+                th:value="${projectionView}">
 
             <div class="form-group projection-date-group">
 
@@ -55,7 +88,9 @@
 
     </section>
 
-    <section class="projection-summary">
+    <section 
+    class="projection-summary"
+    th:if="${projectionView == 'openings'}">
 
         <article class="dashboard-card">
 
@@ -115,7 +150,9 @@
 
     </section>
 
-    <section class="dashboard-section">
+    <section 
+    class="dashboard-section"
+    th:if="${projectionView == 'openings'}">
 
         <div class="projection-section-heading">
 
@@ -309,9 +346,12 @@
 
     </section>
 
+        
+    
     <section
-        class="panel dashboard-section projection-warning-panel"
-        th:if="${projection.hasWarnings()}">
+    class="panel dashboard-section projection-warning-panel"
+    th:if="${projectionView == 'openings'
+        and projection.hasWarnings()}">
 
         <h2>Projection Notes</h2>
 
@@ -324,6 +364,300 @@
             </li>
 
         </ul>
+
+    </section>
+
+    </section>
+
+        <section
+        class="dashboard-section month-roster-section"
+        th:if="${projectionView == 'month-to-month'}">
+
+        <div class="projection-section-heading month-roster-heading">
+
+            <div>
+
+                <h2>Month-to-Month Classroom List</h2>
+
+                <p
+                    th:text="'Projected classroom placement for '
+                        + ${#temporals.format(
+                            projection.projectionDate,
+                            'MMMM d, yyyy'
+                        )}">
+                    Projected classroom placement
+                </p>
+
+            </div>
+
+            <div
+                class="month-roster-legend"
+                aria-label="Student status key">
+
+                <span>
+                    <i class="legend-color transition-soon"></i>
+                    Transition within one month
+                </span>
+
+                <span>
+                    <i class="legend-color capacity-hold"></i>
+                    Waiting because next room is full
+                </span>
+
+            </div>
+
+        </div>
+
+        <div class="month-roster-scroll">
+
+            <div class="month-roster-board">
+
+                <article
+                    class="month-classroom-column"
+                    th:each="classroomProjection
+                        : ${projection.classroomProjections}">
+
+                    <header>
+
+                        <h3
+                            th:text="${classroomProjection
+                                .classroom.classroomName}">
+                            Classroom
+                        </h3>
+
+                        <span
+                            th:text="${classroomProjection.projectedEnrollment
+                                + ' / '
+                                + classroomProjection.licensedCapacity}">
+                            0 / 0
+                        </span>
+
+                    </header>
+
+                    <table class="month-roster-table">
+
+                        <thead>
+
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Student</th>
+                                <th scope="col">Birthdate</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            <tr
+                                th:each="projectedStudent, studentRow
+                                    : ${classroomProjection.projectedStudents}"
+                                th:classappend="${projectedStudent.status.name()
+                                    == 'HELD_FOR_CAPACITY'}
+                                    ? ' capacity-hold-row'
+                                    : (${projectedStudent.transitionWithinOneMonth}
+                                        ? ' transition-soon-row'
+                                        : '')">
+
+                                <td th:text="${studentRow.count}">
+                                    1
+                                </td>
+
+                                <td
+                                    th:text="${projectedStudent.displayName}">
+                                    Student N.
+                                </td>
+
+                                <td
+                                    th:text="${#temporals.format(
+                                        projectedStudent.student.dateOfBirth,
+                                        'MM/dd/yyyy'
+                                    )}">
+                                    01/01/2022
+                                </td>
+
+                            </tr>
+
+                            <tr
+                                class="month-roster-empty"
+                                th:if="${#lists.isEmpty(
+                                    classroomProjection.projectedStudents
+                                )}">
+
+                                <td colspan="3">
+                                    No students projected
+                                </td>
+
+                            </tr>
+
+                                                        <tr
+                                class="upcoming-section-spacer"
+                                th:if="${classroomProjection.hasUpcomingStudents()}">
+
+                                <td colspan="3"></td>
+
+                            </tr>
+
+                            <tr
+                                class="upcoming-section-heading"
+                                th:if="${classroomProjection.hasUpcomingStudents()}">
+
+                                <td colspan="3">
+                                    Starting Within Five Weeks
+                                </td>
+
+                            </tr>
+
+                            <tr
+                                class="upcoming-student-row"
+                                th:each="upcomingStudent, upcomingRow
+                                    : ${classroomProjection.upcomingStudents}">
+
+                                <td>
+                                    +
+                                </td>
+
+                                <td>
+
+                                    <strong
+                                        th:text="${upcomingStudent.firstName
+                                            + ' '
+                                            + upcomingStudent.lastName
+                                                .substring(0, 1)
+                                            + '.'}">
+                                        Student N.
+                                    </strong>
+
+                                    <small
+                                        th:text="'Starts '
+                                            + ${#temporals.format(
+                                                upcomingStudent.enrollmentDate,
+                                                'MM/dd'
+                                            )}">
+                                        Starts 11/01
+                                    </small>
+
+                                </td>
+
+                                <td
+                                    th:text="${#temporals.format(
+                                        upcomingStudent.dateOfBirth,
+                                        'MM/dd/yyyy'
+                                    )}">
+                                    08/09/2026
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </article>
+
+            </div>
+
+        </div>
+
+    </section>
+    
+    <section
+        class="panel dashboard-section future-enrollment-list"
+        th:if="${projectionView == 'month-to-month'}">
+
+        <div class="table-header-row">
+
+            <div>
+
+                <h2>Future Enrollments</h2>
+
+                <p
+                    th:text="'Students beginning after '
+                        + ${#temporals.format(
+                            projection.projectionDate,
+                            'MMMM d, yyyy'
+                        )}">
+                    Students beginning after the selected date
+                </p>
+
+            </div>
+
+            <span
+                class="record-count"
+                th:text="${projection.futureEnrollmentStudentCount
+                    + ' Future Student(s)'}">
+                0 Future Student(s)
+            </span>
+
+        </div>
+
+        <div class="table-responsive">
+
+            <table class="data-table future-enrollment-table">
+
+                <thead>
+
+                    <tr>
+                        <th>Classroom</th>
+                        <th>Student</th>
+                        <th>Enrollment Date</th>
+                        <th>Date of Birth</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    <tr
+                        th:if="${!projection.hasFutureEnrollmentStudents()}">
+
+                        <td colspan="4" class="empty-state">
+                            No future enrollments are scheduled after
+                            this date.
+                        </td>
+
+                    </tr>
+
+                    <tr
+                        th:each="futureStudent
+                            : ${projection.futureEnrollmentStudents}">
+
+                        <td
+                            th:text="${futureStudent.classroom != null
+                                ? futureStudent.classroom.classroomName
+                                : 'Unassigned'}">
+                            Classroom
+                        </td>
+
+                        <td
+                            th:text="${futureStudent.firstName
+                                + ' '
+                                + futureStudent.lastName}">
+                            Student Name
+                        </td>
+
+                        <td
+                            th:text="${#temporals.format(
+                                futureStudent.enrollmentDate,
+                                'MM/dd/yyyy'
+                            )}">
+                            11/01/2026
+                        </td>
+
+                        <td
+                            th:text="${#temporals.format(
+                                futureStudent.dateOfBirth,
+                                'MM/dd/yyyy'
+                            )}">
+                            08/09/2026
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
 
     </section>
 
@@ -348,7 +682,9 @@
 
         </ul>
 
-    </section>
+    
+
+
 
 </main>
 
